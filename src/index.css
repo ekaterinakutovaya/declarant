@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+
+@theme {
+  --font-display: "Satoshi", sans-serif;
+  --color-primary: #1DA57A;
+  /* …etc… */
+}
+
+.demo-logo-vertical {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255,255,255,.2);
+  border-radius: 6px;
+}
+
+.custom-table {
+
+}
+
+.custom-table {
+  tbody, td, th, thead, tr {
+    border-color: #CDEAE5 !important;
+    font-size: 12px !important;
+  }
+
+  .ant-table-container {
+    border-inline-start: 1px solid #CDEAE5 !important;
+    border-top: 1px solid #CDEAE5 !important;
+  }
+}
