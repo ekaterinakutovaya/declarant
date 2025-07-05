@@ -103,12 +103,25 @@ export const DashboardLayout: FC = () => {
     }),
   ];
 
+  const EXPANDED_WIDTH = 200;
+  const COLLAPSED_WIDTH = 80;
+  const siderWidth = collapsed ? COLLAPSED_WIDTH : EXPANDED_WIDTH;
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
         collapsible
         collapsed={collapsed}
         onCollapse={(val) => setCollapsed(val)}
+        width={EXPANDED_WIDTH}          // ← explicit expanded width
+        collapsedWidth={COLLAPSED_WIDTH}// ← explicit collapsed width
+        style={{
+          position: "fixed",
+          left: 0,
+          top: 0,
+          bottom: 0,
+          zIndex: 1000,                // ← make sure it’s on top
+        }}
       >
         <div className="demo-logo-vertical" />
         <Menu
@@ -122,7 +135,13 @@ export const DashboardLayout: FC = () => {
         />
       </Sider>
 
-      <Layout>
+      <Layout
+          style={{
+            marginLeft: siderWidth,
+            transition: "margin-left 0.2s", // smooth if you want
+            minHeight: "100vh",
+          }}
+      >
         <Header style={{ padding: 0, background: colorBgContainer }} />
         <Content style={{ margin: "0 16px" }}>
           <Breadcrumb style={{ margin: "16px 0" }}>

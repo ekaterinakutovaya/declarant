@@ -39,4 +39,91 @@ export interface Declaration {
     usdRate: number;            // Курс Долл.США
     graph2Inn: string;          // Грф. 2 ИНН
     graph8Inn: string;          // Грф. 8 ИНН
+    exporterName?: string;
+    exporterAddress?: string;
+    exporterPhone?: string;
+}
+
+// src/shared/types/types.ts
+
+/**
+ * Represents a legal entity (юридическое лицо) in the system.
+ */
+export interface LegalEntity {
+    /** UUID primary key */
+    id: string;
+    /** Taxpayer Identification Number */
+    inn: string;
+    /** OKPO code */
+    okpo?: string;
+    /** Region or district */
+    region?: string;
+    /** Name of the entity */
+    name: string;
+    /** Registered address */
+    address: string;
+    /** Director or head */
+    director?: string;
+    /** OKED code */
+    oked?: string;
+    /** VAT code */
+    vat_code?: string;
+    /** Contact phone */
+    phone: string;
+    /** Registry or registration number */
+    registry_number?: string;
+    /** Date of registration (ISO string or formatted) */
+    registry_date?: string;
+    /** Foreign currency account */
+    currency_account?: string;
+    /** Reference to banks table */
+    currency_bank_id?: number | null;
+    /** Payment (settlement) account */
+    payment_account?: string;
+    /** Reference to banks table */
+    payment_bank_id?: number | null;
+    /** Record creation timestamp */
+    created_at?: string;
+    /** Record update timestamp */
+    updated_at?: string;
+}
+
+/**
+ * Represents an individual (физическое лицо) in the system.
+ */
+export interface Individual {
+    /** UUID primary key */
+    id: string;
+    /** 14-digit personal ID (PINFL) */
+    pinfl: string;
+    /** Reference to regions table */
+    region_id?: number | null;
+    /** Patent number (if applicable) */
+    patent_number?: string;
+    /** Full name */
+    full_name: string;
+    /** Registered address */
+    address: string;
+    /** Any additional information */
+    additional_information?: string;
+    /** Contact phone */
+    phone: string;
+    /** Passport number */
+    passport_number: string;
+    /** Passport issue date (ISO string or formatted) */
+    passport_issue_date: string;
+    /** Authority that issued the passport */
+    passport_issue_authority: string;
+    /** Foreign currency account */
+    currency_account?: string;
+    /** Reference to banks table */
+    currency_bank_id?: number | null;
+    /** Payment (settlement) account */
+    payment_account?: string;
+    /** Reference to banks table */
+    payment_bank_id?: number | null;
+    /** Record creation timestamp */
+    created_at?: string;
+    /** Record update timestamp */
+    updated_at?: string;
 }

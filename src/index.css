@@ -39,3 +39,7 @@
 .border-blue {
   border: 1px dotted blue;
 }
+
+.ant-form-item-explain {
+  font-size: 12px !important;
+}
