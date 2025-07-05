@@ -15,7 +15,8 @@ CREATE TABLE banks (
 
 CREATE TABLE customs_regimes (
                                  id              BIGSERIAL PRIMARY KEY,
-                                 code            TEXT        NOT NULL,
+                                 code            CHAR(2)        NOT NULL,
+                                 type            CHAR(2)        NOT NULL,
                                  name            TEXT        NOT NULL,
                                  regulatory_legal_acts TEXT  -- any text or JSON listing the acts
 );

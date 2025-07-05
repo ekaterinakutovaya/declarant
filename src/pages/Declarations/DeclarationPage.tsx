@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Spin, message } from 'antd';
 import DeclarationForm from "./ui/DeclarationForm.tsx";
-import type {Declaration} from "./Declarations.tsx";
-// import type { Declaration } from './DeclarationsListPage'; // or wherever your interface lives
+import type {Declaration} from "../../shared/types/types.ts";
 
 export type Mode = 'new' | 'view' | 'edit';
 
@@ -15,9 +14,6 @@ interface Props {
 const DeclarationPage: React.FC<Props> = ({ mode }) => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const [declaration, setDeclaration] = useState<Declaration>({
-
-    });
     const [loading, setLoading] = useState(false);
 
     // Load data when viewing or editing
@@ -87,9 +83,6 @@ const DeclarationPage: React.FC<Props> = ({ mode }) => {
 
             <DeclarationForm
                 mode={mode}
-                initialValues={declaration}
-                loading={loading}
-                onFinish={onFinish}
             />
         </Spin>
     );

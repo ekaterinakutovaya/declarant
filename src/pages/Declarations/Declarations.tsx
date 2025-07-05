@@ -4,41 +4,9 @@ import {Button, Divider, Typography, Table} from "antd";
 import type { ColumnsType } from 'antd/es/table';
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import type {Declaration} from "../../shared/types/types.ts";
 
 const {Title} = Typography;
-
-export interface Declaration {
-    id: string;
-    note: string;               // Примечание
-    type: string;               // Тип
-    status: string;               // Тип
-    mode: string;               // Режим
-    formNumber: string;         // № бланка
-    gtdNumber: string;          // № ГТД
-    post: string;               // Пост
-    gtdRegDate: string;         // Дата рег.ГТД
-    gtdRegNumber: string;       // Рег. № ГТД
-    date: string;               // Дата
-    exporter: string;           // Экспортер
-    importer: string;           // Импортер
-    countryOrigin: string;      // Страна отпр.
-    countryDestination: string; // Страна назн.
-    servicePost: string;        // Усл. пост.
-    places: number;             // Мест
-    quantity: number;           // Количество
-    contractNumber: string;     // № Договора
-    productCode: string;        // Код товара
-    productDetail: string;      // Детал. товара
-    paymentAmount: number;      // Сумма плетеж.
-    customsValue: number;       // Там. стоим.
-    invoiceValue: number;       // Фактур. стоимость
-    grossWeight: number;        // Брутто
-    netWeight: number;          // Нетто
-    ktd: string;                // КТД
-    usdRate: number;            // Курс Долл.США
-    graph2Inn: string;          // Грф. 2 ИНН
-    graph8Inn: string;          // Грф. 8 ИНН
-}
 
 const Declarations = () => {
     const navigate = useNavigate();
