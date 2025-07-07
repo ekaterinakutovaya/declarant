@@ -42,6 +42,7 @@ const breadcrumbNameMap: Record<string, string> = {
   "/": "Главная",
   "/declarations": "Декларации",
   "/declarations/new": "Новая декларация",
+  "/declarations/:id/edit": "ГТД",
   "/reference_book": "Справочник",
   "/reference_book/legal_entities": "Юридические лица",
   "/reference_book/individuals": "Физические лица",
@@ -93,15 +94,26 @@ export const DashboardLayout: FC = () => {
     }
   };
 
-  const pathSnippets = pathname.split("/").filter((i) => i);
+  const segments = pathname.split('/').filter(Boolean);
 
-  const breadcrumbItems = [
-    { path: "/", crumb: breadcrumbNameMap["/"] },
-    ...pathSnippets.map((_, idx) => {
-      const url = "/" + pathSnippets.slice(0, idx + 1).join("/");
-      return { path: url, crumb: breadcrumbNameMap[url] ?? url };
-    }),
+  const breadcrumbItems: { path: string; crumb: string }[] = [
+    { path: '/', crumb: 'Главная' },
   ];
+
+  if (segments[0] === 'declarations') {
+    breadcrumbItems.push({
+      path: '/declarations',
+      crumb: 'Декларации',
+    });
+
+    if (segments.length > 1) {
+      breadcrumbItems.push({
+        path: pathname,
+        crumb: 'ГТД',
+      });
+    }
+  }
+
 
   const EXPANDED_WIDTH = 200;
   const COLLAPSED_WIDTH = 80;
@@ -143,7 +155,7 @@ export const DashboardLayout: FC = () => {
           }}
       >
         <Header style={{ padding: 0, background: colorBgContainer }} />
-        <Content style={{ margin: "0 16px" }}>
+        <Content style={{ margin: "0 16px"  }}>
           <Breadcrumb style={{ margin: "16px 0" }}>
             {breadcrumbItems.map((bc) => (
               <Breadcrumb.Item key={bc.path}>
@@ -154,9 +166,10 @@ export const DashboardLayout: FC = () => {
           <div
             style={{
               padding: 24,
-              minHeight: 360,
+              // minHeight: 360,
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
+              // border: "1px dotted red"
             }}
           >
             <Outlet />

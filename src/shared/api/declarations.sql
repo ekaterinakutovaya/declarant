@@ -1,54 +1,79 @@
 CREATE TABLE declarations (
-                              id                UUID      PRIMARY KEY DEFAULT gen_random_uuid(),
-                              note              TEXT,
+                              id                           UUID      PRIMARY KEY DEFAULT gen_random_uuid(),
+                              note                         TEXT,
 
-    -- "type" is free-form text on client ("Рабочая"|"Черновик"|"Шаблон")
-                              declaration_type              VARCHAR   NOT NULL,
+    -- Статусы и типы
                               workflow_status              VARCHAR   NOT NULL,
-                              submission_type              VARCHAR   NOT NULL,
+                              submission_type              VARCHAR   NOT NULL,        -- из values.submissionType
 
-                              customs_regime_id BIGINT   REFERENCES customs_regimes(id)       ON DELETE SET NULL,
-                              form_number       VARCHAR,
-                              gtd_number        VARCHAR,
+    -- Справочник таможенных режимов (id + дубли полей type/code)
+                              customs_regime_id            BIGINT    REFERENCES customs_regimes(id)    ON DELETE SET NULL,
+                              customs_regime_type          VARCHAR,                                   -- из values.customsRegimeType
+                              customs_regime_code          VARCHAR,                                   -- из values.customsRegimeCode
 
-                              customs_post_id   BIGINT   REFERENCES customs_posts(id)         ON DELETE SET NULL,
+    -- Справочник таможенных постов
+                              customs_post_id              BIGINT    REFERENCES customs_posts(id)      ON DELETE SET NULL,
 
-                              gtd_reg_date      DATE,
-                              gtd_reg_number    VARCHAR,
+    -- Номер и дата/номер регистрации ГТД
+                              form_number                  VARCHAR,                                   -- из values.formNumber
+                              gtd_number                   VARCHAR,                                   -- из values.gTDNumber
+                              gtd_reg_date                 TEXT,                                      -- из values.fillingDate
+                              gtd_reg_number               VARCHAR,                                   -- из values.gTDRegistryNumber
 
-                              date              TEXT,
+    -- Место заполнения
+                              filling_location             TEXT,                                      -- из values.fillingLocation
 
-                              exporter_id       UUID     REFERENCES legal_entities(id)       ON DELETE SET NULL,
-                              importer_id       UUID     REFERENCES individuals(id)          ON DELETE SET NULL,
+    -- Экспортер (грузоотправитель)
+                              exporter_id                  UUID      REFERENCES legal_entities(id)     ON DELETE SET NULL,
+                              exporter_name                TEXT,                                      -- из values.exporterName
+                              exporter_address             TEXT,                                      -- из values.exporterAddress
+                              exporter_phone               VARCHAR,                                   -- из values.exporterPhone
+                              exporter_additional_info     TEXT,                                      -- из values.exporterAdditionalInfo
+                              exporter_name2               TEXT,                                      -- из values.exporterName2
+                              graph2_inn                   VARCHAR,                                   -- из values.exporterInn
 
-                              country_origin_id      BIGINT REFERENCES countries(id)          ON DELETE SET NULL,
-                              country_destination_id BIGINT REFERENCES countries(id)          ON DELETE SET NULL,
+    -- Импортер (грузополучатель)
+                              importer_id                  UUID      REFERENCES legal_entities(id)         ON DELETE SET NULL,
+                              importer_name                TEXT,                                      -- из values.importerName
+                              importer_address             TEXT,                                      -- из values.importerAddress
+                              importer_phone               VARCHAR,                                   -- из values.importerPhone
+                              importer_additional_info     TEXT,                                      -- из values.importerAdditionalInfo
+                              importer_name2               TEXT,                                      -- из values.importerName2
+                              graph8_inn                   VARCHAR,                                   -- из values.importerInn
 
-                              service_condition_id   BIGINT REFERENCES service_conditions(id) ON DELETE SET NULL,
+    -- Контракт
+                              contract_number              VARCHAR,                                   -- можно использовать для номера
+                              contract_number_and_date     VARCHAR,                                   -- из values.contractNumberAndDate
 
-                              places            INT,
-                              quantity          NUMERIC,  -- you can adjust scale/precision if needed
+    -- Данные декларирующего лица
+                              declarant_pinfl              VARCHAR,                                   -- из values.declarantPinfl
 
-                              contract_number   VARCHAR,
-                              product_code      VARCHAR,
-                              product_detail    TEXT,
+    -- Остальные справочники (если понадобятся)
+                              country_origin_id            BIGINT    REFERENCES countries(id)           ON DELETE SET NULL,
+                              country_destination_id       BIGINT    REFERENCES countries(id)           ON DELETE SET NULL,
+                              service_condition_id         BIGINT    REFERENCES service_conditions(id)  ON DELETE SET NULL,
 
-                              payment_amount    NUMERIC,
-                              customs_value     NUMERIC,
-                              invoice_value     NUMERIC,
+    -- Прочие поля (оставил как у вас)
+                              places                       INT,
+                              quantity                     NUMERIC,
+                              product_code                 VARCHAR,
+                              product_detail               TEXT,
+                              payment_amount               NUMERIC,
+                              customs_value                NUMERIC,
+                              invoice_value                NUMERIC,
+                              gross_weight                 NUMERIC,
+                              net_weight                   NUMERIC,
+                              ktd                          VARCHAR,
+                              usd_rate                     NUMERIC,
 
-                              gross_weight      NUMERIC,
-                              net_weight        NUMERIC,
+    -- Доп. листы
+                              additional_sheet_1           VARCHAR(2),
+                              additional_sheet_2           VARCHAR(2),
 
-                              ktd               VARCHAR,
-                              usd_rate          NUMERIC,
-
-                              graph2_inn        VARCHAR,
-                              graph8_inn        VARCHAR,
-
-                              created_at        TIMESTAMP WITH TIME ZONE DEFAULT now(),
-                              updated_at        TIMESTAMP WITH TIME ZONE DEFAULT now()
+                              created_at                   TIMESTAMP WITH TIME ZONE DEFAULT now(),
+                              updated_at                   TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
+
 
 -- Optional trigger to auto-update "updated_at"
 CREATE OR REPLACE FUNCTION set_timestamp()

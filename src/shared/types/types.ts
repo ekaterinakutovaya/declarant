@@ -6,6 +6,22 @@ export interface Regime {
     regulatory_legal_acts: string;
 }
 
+export interface CustomsPost {
+    id: number;
+    code: string;
+    name: string;
+    location: string;
+    phone: string;
+}
+
+export interface Country {
+    id: number;
+    country?: string;
+    letter_code?: string;
+    digital_code: string;
+    offshore: boolean;
+}
+
 export interface Declaration {
     id: string;
     note: string;               // Примечание
@@ -40,8 +56,27 @@ export interface Declaration {
     graph2Inn: string;          // Грф. 2 ИНН
     graph8Inn: string;          // Грф. 8 ИНН
     exporterName?: string;
+    exporterName2?: string;
     exporterAddress?: string;
     exporterPhone?: string;
+    exporterInn?: string;
+    importerName?: string;
+    importerName2?: string;
+    importerAddress?: string;
+    importerPhone?: string;
+    importerInn?: string;
+    gTDRegistryNumber?: string;
+    fillingLocation?: string;
+    fillingDate?: string;
+    gTDNumber?: string;
+    contractNumberAndDate?: string;
+    declarantPinfl?: string;
+    exporterAdditionalInfo?: string;
+    importerAdditionalInfo?: string;
+    additionalSheet1?: string;
+    additionalSheet2?: string;
+    destinationCountryName?: string;
+    destinationCountryCode?: string;
 }
 
 // src/shared/types/types.ts
@@ -102,6 +137,7 @@ export interface Individual {
     patent_number?: string;
     /** Full name */
     full_name: string;
+    name?: string;
     /** Registered address */
     address: string;
     /** Any additional information */

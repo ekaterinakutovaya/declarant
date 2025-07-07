@@ -33,7 +33,7 @@ CREATE TABLE countries (
                            id           BIGSERIAL PRIMARY KEY,
                            country      TEXT    NOT NULL,
                            letter_code  VARCHAR(2) NOT NULL,
-                           digital_code INT     NOT NULL,
+                           digital_code VARCHAR(3) NOT NULL,
                            offshore     BOOLEAN NOT NULL DEFAULT FALSE
 );
 

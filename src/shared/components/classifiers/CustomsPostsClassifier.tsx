@@ -2,28 +2,28 @@ import { Table, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../api/supabaseClient.ts";
 import { Link } from "react-router-dom";
-import type {Regime} from "../../types/types.ts";
+import type {CustomsPost, Regime} from "../../types/types.ts";
 import type { TableColumnsType } from 'antd';
 import type { TableRowSelection } from 'antd/es/table/interface';
 
-interface RegimesClassifierProps {
+interface CustomsPostsClassifierProps {
   selectedKey: number | null;
-  onSelect: (id: number, row: Regime) => void;
-  onDoubleSelect: (id: number, row: Regime) => void;
+  onSelect: (id: number, row: CustomsPost) => void;
+  onDoubleSelect: (id: number, row: CustomsPost) => void;
 }
 
-export const RegimesClassifier: React.FC<RegimesClassifierProps> = ({
+export const CustomsPostsClassifier: React.FC<CustomsPostsClassifierProps> = ({
   selectedKey,
   onSelect,
   onDoubleSelect,
 }) => {
-  const [regimes, setRegimes] = useState<
+  const [data, setData] = useState<
     {
       id: number;
       code: string;
       name: string;
-      type: string;
-      regulatory_legal_acts: string;
+      location: string;
+      phone: string;
     }[]
   >([]);
 
@@ -39,30 +39,24 @@ export const RegimesClassifier: React.FC<RegimesClassifierProps> = ({
     };
 
   // REQUESTS *********************************************
-  async function loadRegimes() {
+  async function loadCustomsPosts() {
       setLoading(true);
-    const { data, error } = await supabase.from("customs_regimes").select("*");
+    const { data, error } = await supabase.from("customs_posts").select("*").order("id", { ascending: true });
       setLoading(false);
     if (error) {
-      console.error("Error loading customs regimes:", error);
+      console.error("Error loading customs posts:", error);
     } else if (data) {
       console.log("data", data);
-      setRegimes(data);
+      setData(data);
     }
   }
   // ******************************************************
 
   useEffect(() => {
-    loadRegimes();
+      loadCustomsPosts();
   }, []);
 
-  const columns: TableColumnsType<Regime> = [
-    {
-      key: "type",
-      dataIndex: "type",
-      title: "Тип",
-      className: "cursor-pointer",
-    },
+  const columns: TableColumnsType<CustomsPost> = [
     {
       key: "code",
       dataIndex: "code",
@@ -76,15 +70,21 @@ export const RegimesClassifier: React.FC<RegimesClassifierProps> = ({
       className: "cursor-pointer",
     },
     {
-      key: "regulatory_legal_acts",
-      dataIndex: "regulatory_legal_acts",
-      title: "НПА",
+      key: "phone",
+      dataIndex: "phone",
+      title: "Телефон",
+      className: "cursor-pointer",
+    },
+    {
+      key: "location",
+      dataIndex: "location",
+      title: "Локация",
       className: "font-semibold",
-      render: (text: string, record: Regime) => {
+      render: (text: string, record: CustomsPost) => {
         return (
           <Tooltip title="Смотреть" placement="bottom">
             <Link
-              key={record.regulatory_legal_acts}
+              key={record.location}
               to={"#"}
               onClick={(e) => {
                 // prevent row click when NPA link is clicked
@@ -106,7 +106,7 @@ export const RegimesClassifier: React.FC<RegimesClassifierProps> = ({
         size={"small"}
         className="custom-table"
         columns={columns}
-        dataSource={regimes}
+        dataSource={data}
         rowKey="id"
         pagination={false}
         loading={loading}
@@ -119,31 +119,3 @@ export const RegimesClassifier: React.FC<RegimesClassifierProps> = ({
     </div>
   );
 };
-
-
-// {
-//     "formNumber": "ED",
-//     "submissionType": "new",
-//     "customsRegimeType": "ЭК",
-//     "customsRegimeCode": "10",
-//     "additionalSheet1": 1,
-//     "additionalSheet2": 1,
-//     "gTDRegistryNumber": "00101",
-//     "exporterName": "\"GREENTECH INNOVATIONS\" MChJ",
-//     "exporterAddress": "Jizzax viloyati, Jizzax shahri, Zargarlik ko'chasi, 4-uy, 3-xonadon",
-//     "exporterPhone": "99899 999 99 99",
-//     "exporterAdditionalInfo": "vfvdfbd",
-//     "exporterName2": "sfgnfgn",
-//     "exporterInn": "303065161",
-//     "importerName": "\"SYNERGY SOLUTIONS\" MChJ",
-//     "importerAddress": "Andijon viloyat, Andijon tuman, Qumko'cha MFY, Qumko'cha 91 uy\t",
-//     "importerPhone": "99999999999",
-//     "importerAdditionalInfo": "sfgnsfgn",
-//     "importerName2": "dfbsbbbsd",
-//     "importerInn": "123456789",
-//     "fillingLocation": "sdfbsdfbdfb",
-//     "fillingDate": "2025-07-06T17:06:17.600Z",
-//     "gTDNumber": "bfbfbfb",
-//     "contractNumberAndDate": "sdfbsdfbds",
-//     "declarantPinfl": "11111111111111"
-// }
