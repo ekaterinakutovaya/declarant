@@ -1,51 +1,85 @@
-import {Button, Divider, Table, Typography} from "antd";
+import { Button, Divider, message, Table, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "../../shared/api/supabaseClient";
+import { LegalEntityForm } from "./ui/LegalEntityForm.tsx";
+import {EditIconButton} from "../../shared/components/ui/EditIconButton.tsx";
+import type {LegalEntity} from "../../shared/types/types.ts";
 
-interface LegalEntity {
-  key: string; // could be the ИНН or a UUID
-  inn: string;
-  okpo: string;
-  region: string;
-  name: string;
-  address: string;
-  director: string;
-  oked: string;
-  vatCode: string;
-  phone: string;
-}
 
-const {Title} = Typography
+const { Title } = Typography;
 
 const LegalEntitiesPage = () => {
-  const [data, setData] = useState<LegalEntity[]>([
-      {
-          key: "1",
-          inn: "987654321",
-          okpo: "87654321",
-          region: "Зангиотинский район",
-          name: '"GREENTECH INNOVATIONS" MChJ',
-          address:
-              "Jizzax viloyati, Jizzax shahri, Zargarlik ko'chasi, 4-uy, 3-xonadon",
-          director: "Testov Test Testovich",
-          oked: "70220",
-          vatCode: "303150099344",
-          phone: "123456789",
-      },
-      {
-          key: "2",
-          inn: "123456789",
-          okpo: "12345678",
-          region: "Ташкентский район",
-          name: '"SYNERGY SOLUTIONS" MChJ',
-          address:
-              "Andijon viloyat, Andijon tuman, Qumko'cha MFY, Qumko'cha 91 uy",
-          director: "John Doe",
-          oked: "70221",
-          vatCode: "303150099345",
-          phone: "99999999999",
-      },
-  ]);
+  const [data, setData] = useState<LegalEntity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [current, setCurrent] = useState<LegalEntity | null>(null);
+
+  // ****************************
+  const fetchEntities = async () => {
+    setLoading(true);
+    const { data: rows, error } = await supabase.from(
+      "legal_entities",
+    )
+        .select(`
+    id,
+    inn,
+    okpo,
+    region:regions(id, code, name),
+    name,
+    address,
+    director,
+    oked,
+    vat_code,
+    phone,
+    additional_info,
+    registry_number,
+    registry_date,
+    payment_account,
+    payment_bank_mfo,
+    currency_account,
+    currency_bank_mfo
+  `)
+    .order("inn", { ascending: true });
+
+    setLoading(false);
+    if (error) {
+      message.error("Не удалось загрузить справочник");
+      console.error(error);
+    } else if (rows) {
+
+      setData(
+          rows.map(r => {
+            console.log("r", r);
+            return {
+              id:               r.id,
+              inn:              r.inn,
+              okpo:             r.okpo,
+              region:           r.region,
+              name:             r.name,
+              address:          r.address,
+              director:         r.director,
+              oked:             r.oked,
+              vat_code:         r.vat_code,
+              phone:            r.phone,
+              additional_info:  r.additional_info,
+              registry_number:  r.registry_number,
+              registry_date:    r.registry_date,
+              payment_account:  r.payment_account,
+              payment_bank_mfo: r.payment_bank_mfo,
+              currency_account: r.currency_account,
+              currency_bank_mfo:r.currency_bank_mfo,
+            };
+          })
+      );
+    }
+  };
+  // ****************************
+
+  useEffect(() => {
+    fetchEntities();
+  }, []);
 
   const columns: ColumnsType<LegalEntity> = [
     {
@@ -65,6 +99,9 @@ const LegalEntitiesPage = () => {
       dataIndex: "region",
       key: "region",
       align: "center",
+      render: (record: LegalEntity) => (
+          <div>{record.name}</div>
+      )
     },
     {
       title: "Наименование",
@@ -79,7 +116,7 @@ const LegalEntitiesPage = () => {
       dataIndex: "address",
       key: "address",
       ellipsis: true,
-        align: "center",
+      align: "center",
       width: "20%",
     },
     {
@@ -96,7 +133,7 @@ const LegalEntitiesPage = () => {
     },
     {
       title: "Код НДС",
-      dataIndex: "vatCode",
+      dataIndex: "vat_code",
       key: "vatCode",
       align: "center",
     },
@@ -106,36 +143,76 @@ const LegalEntitiesPage = () => {
       key: "phone",
       align: "center",
     },
+    {
+      title: "Действие",
+      dataIndex: "operation",
+      key: "operation",
+      width: "3%",
+      align: "center",
+      fixed: "right",
+      render: (_, record: LegalEntity) => {
+        console.log(record);
+        return (
+            <div className="flex justify-center gap-x-2">
+              <EditIconButton onClick={() => onEdit(record)} />
+            </div>
+        );
+      },
+    },
   ];
 
-  const onAdd = () => {};
+  const onCreate = () => {
+    setCurrent(null);
+    setModalOpen(true);
+  };
+
+  const onEdit = (row: LegalEntity) => {
+    setCurrent(row);
+    setModalOpen(true);
+  }
 
   return (
-    <div>
+    <>
+      <div>
         <Title level={3}>Юридические лица</Title>
         <Divider
-            style={{
-                borderColor: "#4DB6AC",
-                marginTop: "0",
-            }}
+          style={{
+            borderColor: "#4DB6AC",
+            marginTop: "0",
+          }}
         />
 
-      <div className="w-full text-end my-4">
-        <Button type="primary" onClick={onAdd}>
-          + Создать
-        </Button>
-      </div>
-      <Table<LegalEntity>
+        <div className="w-full text-end my-4">
+          <Button type="primary" onClick={onCreate}>
+            + Создать
+          </Button>
+        </div>
+        <Table<LegalEntity>
           size="small"
-        columns={columns}
-        dataSource={data}
-        rowKey="key"
-        pagination={{ pageSize: 10 }}
-        scroll={{ x: "max-content" }}
-        bordered
-        className="custom-table w-full"
-      />
-    </div>
+          columns={columns}
+          dataSource={data}
+          rowKey="key"
+          pagination={{ pageSize: 10 }}
+          scroll={{ x: "max-content" }}
+          bordered
+          className="custom-table w-full"
+          loading={loading}
+        />
+      </div>
+
+      {modalOpen && (
+        <LegalEntityForm
+          open={modalOpen}
+          title="Юридическое лицо"
+          initialEntity={current}
+          onCancel={() => setModalOpen(false)}
+          onSaved={() => {
+            setModalOpen(false);
+            fetchEntities();
+          }}
+        />
+      )}
+    </>
   );
 };
 

@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ConfigProvider } from "antd";
 import ruRU from "antd/locale/ru_RU";
 import LegalEntitiesPage from "../../pages/ReferenceBook/LegalEntitiesPage.tsx";
-import HomePage from "../../pages/HomePage.tsx";
 import { DashboardLayout } from "../../widgets/Layout/DashboardLayout.tsx";
 import Declarations from "../../pages/Declarations/Declarations.tsx";
 import DeclarationPage from "../../pages/Declarations/DeclarationPage.tsx";
@@ -24,25 +23,15 @@ export const AppRouter = () => {
       <BrowserRouter>
         <Routes>
           <Route element={<DashboardLayout />}>
-            <Route index element={<HomePage />} />
+            <Route index element={<Declarations />} />
+            <Route path="declarations" element={<Declarations />} />
             <Route
-              path="declarations"
-              element={<Declarations />}
+              path="declarations/new"
+              element={<DeclarationPage mode="new" />}
             />
-            {/* New declaration */}
             <Route
-                path="declarations/new"
-                element={<DeclarationPage mode="new" />}
-            />
-            {/* View declaration */}
-            <Route
-                path="declarations/:id"
-                element={<DeclarationPage mode="view" />}
-            />
-            {/* Edit declaration */}
-            <Route
-                path="declarations/:id/edit"
-                element={<DeclarationPage mode="edit" />}
+              path="declarations/:id/edit"
+              element={<DeclarationPage mode="edit" />}
             />
             <Route
               path="reference_book/legal_entities"

@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS public.legal_entities (
     currency_bank_id    BIGINT   REFERENCES public.banks(id) ON DELETE SET NULL,
     payment_account     TEXT,                      -- расчетный счёт
     payment_bank_id     BIGINT   REFERENCES public.banks(id) ON DELETE SET NULL,
+    region_id     BIGINT   REFERENCES public.regions(id) ON DELETE SET NULL,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()

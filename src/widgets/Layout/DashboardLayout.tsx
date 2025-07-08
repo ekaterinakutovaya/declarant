@@ -1,9 +1,7 @@
-// src/widgets/Layout/DashboardLayout.tsx
 import React, { useEffect, useState } from "react";
 import type { FC } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
-  DesktopOutlined,
   FileOutlined,
   PieChartOutlined,
   TeamOutlined,
@@ -29,7 +27,7 @@ const items: MenuItem[] = [
   getItem("Декларации", "/declarations", <PieChartOutlined />),
   getItem("Справочник", "sub1", <UserOutlined />, [
     getItem("Юридические лица", "/reference_book/legal_entities"),
-    getItem("Физические лица", "/reference_book/individuals"),
+    getItem("Физические лица", "#"),
   ]),
   getItem("Team", "sub2", <TeamOutlined />, [
     getItem("Team 1", "6"),
@@ -37,21 +35,14 @@ const items: MenuItem[] = [
   ]),
   getItem("Files", "9", <FileOutlined />),
 ];
-
-const breadcrumbNameMap: Record<string, string> = {
-  "/": "Главная",
-  "/declarations": "Декларации",
-  "/declarations/new": "Новая декларация",
-  "/declarations/:id/edit": "ГТД",
-  "/reference_book": "Справочник",
-  "/reference_book/legal_entities": "Юридические лица",
-  "/reference_book/individuals": "Физические лица",
-};
-
 function flattenKeys(items: MenuItem[]): string[] {
   return items.reduce<string[]>((all, item) => {
     all.push(String(item?.key));
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     if (item?.children) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       all.push(...flattenKeys(item?.children));
     }
     return all;
