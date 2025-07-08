@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate  } from "react-router-dom";
 
 import { ConfigProvider } from "antd";
 import ruRU from "antd/locale/ru_RU";
@@ -26,7 +26,10 @@ export const AppRouter = () => {
       <BrowserRouter>
         <Routes>
           <Route element={<DashboardLayout />}>
-            <Route index element={<Declarations />} />
+            <Route
+                index
+                element={<Navigate to="declarations" replace />}
+            />
             <Route path="declarations" element={<Declarations />} />
             <Route
               path="declarations/new"
