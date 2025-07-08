@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import type { FC } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
+  FileDoneOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
@@ -24,16 +22,11 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem("Декларации", "/declarations", <PieChartOutlined />),
+  getItem("Декларации", "/declarations", <FileDoneOutlined   />),
   getItem("Справочник", "sub1", <UserOutlined />, [
     getItem("Юридические лица", "/reference_book/legal_entities"),
     getItem("Физические лица", "#"),
   ]),
-  getItem("Team", "sub2", <TeamOutlined />, [
-    getItem("Team 1", "6"),
-    getItem("Team 2", "8"),
-  ]),
-  getItem("Files", "9", <FileOutlined />),
 ];
 function flattenKeys(items: MenuItem[]): string[] {
   return items.reduce<string[]>((all, item) => {
@@ -128,6 +121,7 @@ export const DashboardLayout: FC = () => {
       >
         <div className="demo-logo-vertical" />
         <Menu
+            style={{paddingTop: "20px"}}
           theme="dark"
           mode="inline"
           items={items}
