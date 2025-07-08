@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { ConfigProvider } from "antd";

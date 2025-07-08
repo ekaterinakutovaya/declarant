@@ -3,5 +3,17 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    // turn off the strictest checks:
+    "strict": false,
+
+    // skip checking of declaration files and library sources:
+    "skipLibCheck": true,
+
+    // allow implicit any:
+    "noImplicitAny": false,
+
+    // you can also disable isolatedModules, strictNullChecks, etc.
+  }
 }

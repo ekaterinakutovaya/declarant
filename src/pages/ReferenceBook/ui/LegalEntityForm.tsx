@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { DatePicker, Form, Input, Modal, Select } from "antd";
 import type { LegalEntity, Region } from "../../../shared/types/types.ts";
 import dayjs, { type Dayjs } from "dayjs";

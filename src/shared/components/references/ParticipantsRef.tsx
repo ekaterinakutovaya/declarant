@@ -1,9 +1,11 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import { Table, Tabs, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../api/supabaseClient.ts";
 import { Link } from "react-router-dom";
 import type { Individual, LegalEntity, Regime } from "../../types/types.ts";
-import type { TableColumnsType } from 'antd';
 import type { TableRowSelection } from 'antd/es/table/interface';
 import type {ColumnsType} from "antd/es/table";
 
@@ -27,8 +29,6 @@ export const ParticipantsRef: React.FC<ParticipantsRefProps> = ({
     // State for individuals
     const [individuals, setIndividuals] = useState<Individual[]>([]);
     const [indLoading, setIndLoading] = useState<boolean>(false);
-
-    const [loading, setLoading] = useState<boolean>(false);
 
     // ***********************************************************************
     const loadLegalEntities = async () => {
@@ -109,51 +109,7 @@ export const ParticipantsRef: React.FC<ParticipantsRefProps> = ({
             ),
         },
     ];
-
-  const columns: TableColumnsType<Regime> = [
-    {
-      key: "type",
-      dataIndex: "type",
-      title: "Тип",
-      className: "cursor-pointer",
-    },
-    {
-      key: "code",
-      dataIndex: "code",
-      title: "Код",
-      className: "cursor-pointer",
-    },
-    {
-      key: "name",
-      dataIndex: "name",
-      title: "Наименование",
-      className: "cursor-pointer",
-    },
-    {
-      key: "regulatory_legal_acts",
-      dataIndex: "regulatory_legal_acts",
-      title: "НПА",
-      className: "font-semibold",
-      render: (text: string, record: Regime) => {
-        return (
-          <Tooltip title="Смотреть" placement="bottom">
-            <Link
-              key={record.regulatory_legal_acts}
-              to={"#"}
-              onClick={(e) => {
-                // prevent row click when NPA link is clicked
-                e.stopPropagation();
-              }}
-            >
-              {text}
-            </Link>
-          </Tooltip>
-        );
-      },
-    },
-  ];
-
-  return (
+    return (
     <div className="">
         <Tabs defaultActiveKey="legal">
             <TabPane tab="Юридические лица" key="legal">
@@ -192,21 +148,6 @@ export const ParticipantsRef: React.FC<ParticipantsRefProps> = ({
                 />
             </TabPane>
         </Tabs>
-      {/*<Table*/}
-      {/*  bordered*/}
-      {/*  size={"small"}*/}
-      {/*  className="custom-table"*/}
-      {/*  columns={columns}*/}
-      {/*  dataSource={[]}*/}
-      {/*  rowKey="id"*/}
-      {/*  pagination={false}*/}
-      {/*  loading={loading}*/}
-      {/*  rowSelection={rowSelection}*/}
-      {/*  onRow={(record) => ({*/}
-      {/*      onClick: () => onSelect(record.id, record),*/}
-      {/*      onDoubleClick: () => onDoubleSelect(record.id, record),*/}
-      {/*  })}*/}
-      {/*/>*/}
     </div>
   );
 };

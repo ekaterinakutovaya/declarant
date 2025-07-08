@@ -98,40 +98,6 @@ export interface Declaration {
   updated_at?: string | null; // Optional if not always selected
 }
 
-// DeclarationRow.ts
-// export interface DeclarationRow {
-//   key?:                 string;
-//   declarationType?:     string;
-//   customsRegime?:       string;
-//   formNumber?:          string;
-//   gtdNumber?:           string;
-//   customsPost?:         string;
-//   gtdRegDate?:          string;
-//   gtdRegNumber?:        string;
-//   date?:                string;
-//   exporter?:            string;
-//   importer?:            string;
-//   countryOrigin?:       string;
-//   countryDestination?:  string;
-//   serviceConditions?:   number;
-//   places?:              number;
-//   quantity?:            number;
-//   contractNumber?:      string;
-//   productCode?:         string;
-//   productDetail?:       string;
-//   paymentAmount?:       number;
-//   customsValue?:        number;
-//   invoiceValue?:        number;
-//   grossWeight?:         number;
-//   netWeight?:           number;
-//   ktd?:                 string;
-//   usdRate?:             number;
-//   note?:                string;
-//   workflowStatus?:      string;
-//   created_at?: string; // Assuming it's always there
-//   updated_at?: string; // Optional if not always selected
-// }
-
 export interface DeclarationRow {
   key:               string;
   declarationType:   string;
@@ -213,7 +179,8 @@ export interface LegalEntity {
  */
 export interface Individual {
   /** UUID primary key */
-  id: string;
+  id?: string;
+  key?: string;
   /** 14-digit personal ID (PINFL) */
   pinfl: string;
   /** Reference to regions table */
